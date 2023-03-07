@@ -2,8 +2,11 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
-import missingno as msno
-
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 train = pd.read_csv("train.csv")
 print((train.head()))
@@ -255,8 +258,73 @@ plt.show(block=True)
 
 cars = cars.dropna()
 
+print(check_df(cars))
+
+
+# ENCODING
+
+# One Hot Encoding
+
+ohe= OneHotEncoder()
+
+def one_hot_encoder(dataframe, categorical_cols, drop_first=True):
+    dataframe = pd.get_dummies(dataframe, columns=categorical_cols, drop_first=drop_first)
+    return dataframe
+
+cars = one_hot_encoder(cars, cat_cols, drop_first=True)
+print(cars.head())
+
+
+# MODEL BUILDING
+
+print(cars.columns)
+X = cars.drop(['ID', 'Levy', 'Manufacturer', 'Model', 'Prod. year',
+              'Category', 'Engine volume', 'Mileage', 'Cylinders', 'Color', 'Airbags',
+              'Leather interior_Yes', 'Fuel type_Diesel', 'Fuel type_Hybrid',
+              'Fuel type_Hydrogen', 'Fuel type_LPG', 'Fuel type_Petrol',
+              'Fuel type_Plug-in Hybrid', 'Gear box type_Manual',
+              'Gear box type_Tiptronic', 'Gear box type_Variator',
+              'Drive wheels_Front', 'Drive wheels_Rear', 'Doors_04-May', 'Doors_>5',
+              'Wheel_Right-hand drive'], axis  =1)
+
+y = cars['Price']
+
+X_train , X_test , y_train , y_test = train_test_split(X,y, test_size=0.3, shuffle=True, random_state=11)
+
+
+# Scaling
+
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test  = sc.fit_transform(X_test)
+
+
+print(X_train)
+
+print("X_train shape: {}".format(X_train.shape))
+print("X_test shape: {}".format(X_test.shape))
+print("y_train shape: {}".format(y_train.shape))
+print("y_test shape: {}".format(y_test.shape))
+
+
+# Fitting Model
+
+model = LinearRegression()
+print(model.fit(X_train, y_train))
+
+y_pred = model.predict(X_test)
+pd.DataFrame({'test':y_test, 'pred': y_pred}).head()
+
+# Evaluation
+
+print(f"MAE:{mean_absolute_error(y_test, y_pred)}")
+print(f"RMSE:{mean_absolute_error(y_test, y_pred)}")
+
+print(model.score(X_test,y_test))
 
 
 
-
-
+sns.regplot(x=y_test, y=y_pred)
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted Prices")
+plt.show()

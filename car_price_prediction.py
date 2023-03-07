@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeRegressor
+import plotly.express as px
 
 train = pd.read_csv("train.csv")
 print((train.head()))
@@ -368,5 +369,15 @@ print((gbr.score(X_test,y_test)))
 # test :  -69.34814546475437
 
 
-# XGBOOST
 
+models = pd.DataFrame({
+
+    'Model' : ['Linear Regression', 'Decision Tree', 'Random Forest', 'Gradient Boost'],
+    'Score' : [model.score(X_test,y_test),dtr.score(X_test,y_test),rfr.score(X_test,y_test),gbr.score(X_test,y_test)]
+
+})
+
+print(models.sort_values(by = 'Score', ascending=False))
+
+px.bar(data_frame = models , x = 'Score', y = 'Model', color='Score', template='plotly_dark',
+       title = 'Models Comparision')

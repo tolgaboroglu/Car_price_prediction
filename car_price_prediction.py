@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Lasso, LassoCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -237,15 +238,8 @@ def missing_values_table(dataframe,na_name = False):
 missing_values_table(cars)
 
 # CORRELATION
-
-
-
 corr = cars[num_cols].corr()
 print(corr)
-
-
-
-
 
 sns.set(rc={'figure.figsize':(12,12)})
 sns.heatmap(corr,cmap="RdBu")
@@ -259,7 +253,6 @@ plt.show(block=True)
 cars = cars.dropna()
 
 print(check_df(cars))
-
 
 # ENCODING
 
@@ -309,6 +302,8 @@ print("y_test shape: {}".format(y_test.shape))
 
 # Fitting Model
 
+# LINEAR REGRESSION
+
 model = LinearRegression()
 print(model.fit(X_train, y_train))
 
@@ -328,3 +323,6 @@ sns.regplot(x=y_test, y=y_pred)
 plt.xlabel("Actual Prices")
 plt.ylabel("Predicted Prices")
 plt.show()
+
+
+

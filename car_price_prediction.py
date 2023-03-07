@@ -385,6 +385,11 @@ models = pd.DataFrame({
 
 print(models.sort_values(by = 'Score', ascending=False))
 
-px.bar(data_frame = models , x = 'Score', y = 'Model', color='Score', template='plotly_dark',
-       title = 'Models Comparision')
+plt.figure(figsize=(12,7))
+models.sort_values(by=['Score'], ascending=False, inplace=True)
+
+sns.barplot(x='Score', y='Model',data = models, palette='Blues')
+plt.xlabel('Score')
+plt.ylabel('Model')
+plt.show()
 

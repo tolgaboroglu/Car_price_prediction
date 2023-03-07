@@ -377,7 +377,14 @@ models = pd.DataFrame({
 
 })
 
+#                Model       Score
+# 2      Random Forest  -53.600922
+# 3     Gradient Boost  -69.348145
+# 1      Decision Tree  -69.536591
+# 0  Linear Regression -130.964667
+
 print(models.sort_values(by = 'Score', ascending=False))
 
 px.bar(data_frame = models , x = 'Score', y = 'Model', color='Score', template='plotly_dark',
        title = 'Models Comparision')
+

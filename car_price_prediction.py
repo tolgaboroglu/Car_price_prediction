@@ -2,12 +2,14 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.model_selection import train_test_split
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import Lasso, LassoCV
+from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.tree import DecisionTreeRegressor
 
 train = pd.read_csv("train.csv")
 print((train.head()))
@@ -317,7 +319,9 @@ print(f"RMSE:{mean_absolute_error(y_test, y_pred)}")
 
 print(model.score(X_test,y_test))
 
-
+# MAE:136314.46503538327
+# RMSE:136314.46503538327
+# -130.9646665492095
 
 sns.regplot(x=y_test, y=y_pred)
 plt.xlabel("Actual Prices")
@@ -325,4 +329,44 @@ plt.ylabel("Predicted Prices")
 plt.show()
 
 
+# Decision Tree Regressor
+
+dtr = DecisionTreeRegressor()
+print(dtr.fit(X_train, y_train))
+
+print(dtr.score(X_train, y_train))
+
+print(dtr.score(X_test, y_test))
+
+# train : 1.0
+# test : -69.53659132560271
+
+
+# RANDOM FOREST REGRESSOR
+
+rfr = RandomForestRegressor()
+print(rfr.fit(X_train, y_train))
+
+print(rfr.score(X_train, y_train))
+
+print(rfr.score(X_test, y_test))
+# train : 0.9314720050029666
+# test : -52.653368490680876
+
+
+# GRADIENT BOOST REGRESSOR
+
+gbr = GradientBoostingRegressor()
+print(gbr.fit(X_train,y_train))
+
+print(gbr.score(X_train, y_train))
+
+# train : 0.9999973838353556
+
+print((gbr.score(X_test,y_test)))
+
+# test :  -69.34814546475437
+
+
+# XGBOOST
 
